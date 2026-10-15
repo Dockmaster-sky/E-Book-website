@@ -1,15 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom/cjs/react-router-dom.min'
 import Rating from '../components/Rating'
 import Price from '../components/ui/Price'
 import Book from '../components/ui/Book'
 
-const BookInfo = ({ books, addToCart }) => {
-    const {id} = useParams()
-    const book = books.find(book => +book.id === +id)
-    console.log(book)
-    
+const BookInfo = ({ books, addToCart, cart }) => {
+    const { id } = useParams()
+    const book = books.find((book) => +book.id === +id)
+
+    function addBookToCart(book) {
+        addToCart(book)
+    }
+
+    // timestamp 22:00 add to cart
+    function bookExistsOnCart() {
+        return cart.find(book => book.id === +id);
+    }
 
   return (
     <div id="books__body">
@@ -49,9 +56,41 @@ const BookInfo = ({ books, addToCart }) => {
 
                                 </p>
                             </div>
-                            <button className="btn" onClick={() => addToCart(book)}>
-                                Add to cart
-                            </button>
+
+                            {/* adds a link function to the checkout button here 22:30 */}
+
+                            {
+                                bookExistsOnCart() 
+                                
+                                ? (<Link to={"/cart"}> <button className="btn">Checkout</button> </Link>)
+                                : 
+                            <button className="btn" onClick={() => addBookToCart(book)}>Add Book</button>
+                            }
+
+                            
+
+
+                            {/* this part was broken and I was not able to fix it at this time 
+                            add to cart timestamp 9:30*/}
+
+                            {/* {bookInCart() ? 
+                             (<Link to={"/cart"} className="book__link">
+                            <button className="btn">Checkout</button> 
+                            </Link>) : 
+                            (<button className="btn" onClick={() => addBookToCart(book)}>Add to cart</button>)
+
+                            } */}
+
+
+                                {/* the code i used as a crutch */}
+
+                            {/* <div className="btn__fix">
+                                <Link to={"/cart"} className="book__link">
+                                <button className="btn">Checkout</button> 
+                                </Link>
+                                <button className="btn" onClick={() => addToCart(book)}>Add to cart</button>
+                            </div>   */}
+
                         </div>
                     </div>
                 </div>
